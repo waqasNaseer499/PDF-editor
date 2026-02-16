@@ -11,6 +11,9 @@ module.exports = {
         display: ['var(--font-display)'],
         body: ['var(--font-body)'],
       },
+      screens: {
+        'xs': '375px',
+      },
     },
   },
   plugins: [],

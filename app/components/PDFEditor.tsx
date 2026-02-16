@@ -443,25 +443,25 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Toolbar */}
       <div className="glass border-b border-slate-200 sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 py-2 sm:py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 md:gap-4">
             {/* Left Section */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={onClose}
-                className="btn-secondary px-4 py-2 text-sm flex items-center gap-2"
+                className="btn-secondary px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm flex items-center gap-1"
                 aria-label="Go back to home page"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Back
+                <span className="hidden xs:inline">Back</span>
               </button>
-              <h2 className="font-bold text-xl text-slate-800">PDF Editor</h2>
+              <h2 className="font-bold text-sm sm:text-lg md:text-xl text-slate-800 truncate">PDF Editor</h2>
             </div>
 
             {/* Tools */}
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1 flex-wrap justify-center w-full sm:w-auto">
               {[
                 { tool: 'select' as Tool, icon: '👆', label: 'Select' },
                 { tool: 'text' as Tool, icon: '📝', label: 'Text' },
@@ -473,7 +473,7 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
                 <button
                   key={tool}
                   onClick={() => setSelectedTool(tool)}
-                  className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                  className={`px-1.5 sm:px-3 py-1 sm:py-2 rounded text-xs sm:text-sm font-semibold transition-all ${
                     selectedTool === tool
                       ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
                       : 'bg-white text-slate-700 hover:bg-slate-50'
@@ -482,7 +482,7 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
                   aria-label={`${label} tool`}
                   aria-pressed={selectedTool === tool}
                 >
-                  <span className="text-lg" aria-hidden="true">{icon}</span>
+                  <span className="text-sm sm:text-lg" aria-hidden="true">{icon}</span>
                 </button>
               ))}
 
@@ -491,7 +491,7 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
                 type="color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
-                className="w-12 h-10 rounded-lg cursor-pointer border-2 border-white shadow-lg"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded cursor-pointer border-2 border-white shadow-lg"
                 title="Color picker"
                 aria-label="Select annotation color"
               />
@@ -504,7 +504,7 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
                   onChange={(e) => setFontSize(parseInt(e.target.value))}
                   min="8"
                   max="72"
-                  className="w-20 px-3 py-2 rounded-lg border-2 border-slate-200"
+                  className="w-12 sm:w-20 px-1 sm:px-3 py-1 sm:py-2 rounded text-xs sm:text-sm border-2 border-slate-200"
                   placeholder="Size"
                   aria-label="Set font size for text annotations"
                 />
@@ -512,24 +512,24 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
             </div>
 
             {/* Right Section */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
               <button
                 onClick={() => setAnnotations(annotations.slice(0, -1))}
-                className="btn-secondary px-4 py-2 text-sm"
+                className="btn-secondary px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
                 disabled={annotations.length === 0}
                 aria-label="Undo last annotation"
               >
-                Undo
+                ↶
               </button>
               <button
                 onClick={handleDownload}
-                className="btn-primary px-6 py-2 text-sm flex items-center gap-2"
+                className="btn-primary px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm flex items-center gap-1"
                 aria-label="Download edited PDF file"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Download PDF
+                <span className="hidden sm:inline text-xs md:text-sm">Download</span>
               </button>
             </div>
           </div>
@@ -537,17 +537,17 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
       </div>
 
       {/* Canvas Area */}
-      <div className="container mx-auto px-6 py-8">
-        <div className="flex gap-6">
+      <div className="container mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+        <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-6">
           {/* Main Canvas */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div 
               ref={containerRef}
-              className="bg-white rounded-2xl shadow-2xl p-8 overflow-auto"
-              style={{ maxHeight: 'calc(100vh - 250px)' }}
+              className="bg-white rounded-lg sm:rounded-xl md:rounded-2xl shadow-lg sm:shadow-xl md:shadow-2xl p-2 sm:p-4 md:p-8 overflow-auto"
+              style={{ maxHeight: 'calc(100vh - 200px)' }}
             >
-              <div className="relative inline-block">
-                <canvas ref={canvasRef} className="border border-slate-200 rounded-lg" />
+              <div className="relative inline-block w-full">
+                <canvas ref={canvasRef} className="border border-slate-200 rounded w-full max-w-full" />
                 <canvas
                   ref={overlayRef}
                   className={`absolute top-0 left-0 ${
@@ -569,15 +569,15 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
                     onChange={(e) => setTextInput(e.target.value)}
                     onBlur={handleSaveText}
                     onKeyDown={handleTextInputKeyDown}
-                    className="absolute px-2 py-1 border-2 border-indigo-500 rounded bg-white text-slate-800 font-sans z-10"
+                    className="absolute px-2 py-1 border-2 border-indigo-500 rounded bg-white text-slate-800 font-sans z-10 text-sm sm:text-base"
                     style={{
                       left: `${editingText.x}px`,
                       top: `${editingText.y}px`,
                       fontSize: `${fontSize}px`,
                       color: color,
-                      minWidth: '200px',
+                      minWidth: '150px',
                     }}
-                    placeholder="Type text here..."
+                    placeholder="Type text..."
                     aria-label="Text input for annotation"
                   />
                 )}
@@ -585,43 +585,43 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
             </div>
 
             {/* Page Controls */}
-            <div className="flex items-center justify-center gap-4 mt-6">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mt-3 sm:mt-4 md:mt-6 flex-wrap">
               <button
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="btn-secondary px-4 py-2"
+                className="btn-secondary px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm"
                 aria-label="Go to previous page"
               >
-                Previous
+                ← Prev
               </button>
-              <span className="text-slate-700 font-semibold" aria-live="polite">
-                Page {currentPage} of {totalPages}
+              <span className="text-slate-700 font-semibold text-xs sm:text-sm md:text-base whitespace-nowrap" aria-live="polite">
+                {currentPage} / {totalPages}
               </span>
               <button
                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className="btn-secondary px-4 py-2"
+                className="btn-secondary px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm"
                 aria-label="Go to next page"
               >
-                Next
+                Next →
               </button>
             </div>
 
             {/* Zoom Controls */}
-            <div className="flex items-center justify-center gap-4 mt-4">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4">
               <button
                 onClick={() => setZoom(Math.max(0.5, zoom - 0.25))}
-                className="btn-secondary px-4 py-2"
+                className="btn-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm"
                 aria-label="Zoom out"
               >
-                -
+                −
               </button>
-              <span className="text-slate-700 font-semibold min-w-[80px] text-center" aria-live="polite">
+              <span className="text-slate-700 font-semibold min-w-[50px] sm:min-w-[70px] text-center text-xs sm:text-sm" aria-live="polite">
                 {Math.round(zoom * 100)}%
               </span>
               <button
                 onClick={() => setZoom(Math.min(3, zoom + 0.25))}
-                className="btn-secondary px-4 py-2"
+                className="btn-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm"
                 aria-label="Zoom in"
               >
                 +
@@ -630,27 +630,27 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
           </div>
 
           {/* Sidebar */}
-          <div className="w-80">
-            <div className="glass rounded-2xl p-6 sticky top-24">
-              <h3 className="font-bold text-lg text-slate-800 mb-4">Annotations</h3>
-              <div className="space-y-2 max-h-96 overflow-auto" role="region" aria-label="List of annotations on current page">
-                {annotations.filter(ann => ann.page === currentPage).map((ann, index) => (
-                  <div key={ann.id} className="bg-white rounded-lg p-3 text-sm">
-                    <div className="flex justify-between items-start">
-                      <span className="font-semibold text-slate-700 capitalize">{ann.type}</span>
+          <div className="w-full lg:w-64 xl:w-80">
+            <div className="glass rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 sticky top-20 max-h-96 sm:max-h-full">
+              <h3 className="font-bold text-sm sm:text-base md:text-lg text-slate-800 mb-3 sm:mb-4">Annotations</h3>
+              <div className="space-y-2 max-h-80 overflow-auto text-xs sm:text-sm" role="region" aria-label="List of annotations on current page">
+                {annotations.filter(ann => ann.page === currentPage).map((ann) => (
+                  <div key={ann.id} className="bg-white rounded-lg p-2 sm:p-3">
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="font-semibold text-slate-700 capitalize truncate">{ann.type}</span>
                       <button
                         onClick={() => setAnnotations(annotations.filter(a => a.id !== ann.id))}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-500 hover:text-red-700 flex-shrink-0"
                         aria-label={`Delete ${ann.type} annotation`}
                       >
-                        ×
+                        ✕
                       </button>
                     </div>
-                    {ann.text && <p className="text-slate-600 mt-1 truncate">{ann.text}</p>}
+                    {ann.text && <p className="text-slate-600 mt-1 truncate text-xs">{ann.text}</p>}
                   </div>
                 ))}
                 {annotations.filter(ann => ann.page === currentPage).length === 0 && (
-                  <p className="text-slate-500 text-center py-8">No annotations on this page</p>
+                  <p className="text-slate-500 text-center py-4 text-xs">No annotations</p>
                 )}
               </div>
             </div>
