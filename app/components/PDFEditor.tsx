@@ -42,10 +42,15 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
   const [color, setColor] = useState('#000000');
   const [zoom, setZoom] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [editingText, setEditingText] = useState<{ x: number; y: number } | null>(null);
+  const [textInput, setTextInput] = useState('');
+  const [draggingAnnotation, setDraggingAnnotation] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const textInputRef = useRef<HTMLInputElement>(null);
 
   // Load PDF
   useEffect(() => {
@@ -154,29 +159,44 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
 
   // Mouse handlers
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (selectedTool === 'select') return;
+    if (editingText) return; // Don't allow other interactions while editing text
 
     const rect = overlayRef.current!.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    if (selectedTool === 'text') {
-      const text = prompt('Enter text:');
-      if (text) {
-        const newAnnotation: Annotation = {
-          id: Date.now().toString(),
-          type: 'text',
-          page: currentPage,
-          x,
-          y,
-          text,
-          fontSize,
-          color,
-        };
-        setAnnotations([...annotations, newAnnotation]);
+    // Check if clicking on an existing text annotation
+    if (selectedTool === 'select' || selectedTool === 'text') {
+      const clickedAnnotation = annotations.find(ann => {
+        if (ann.page !== currentPage || ann.type !== 'text') return false;
+        // Check if click is within text bounds (rough estimate)
+        const textWidth = (ann.text?.length || 0) * ((ann.fontSize || 16) * 0.6);
+        return (
+          x >= ann.x &&
+          x <= ann.x + textWidth &&
+          y >= ann.y - (ann.fontSize || 16) &&
+          y <= ann.y + 5
+        );
+      });
+
+      if (clickedAnnotation) {
+        setDraggingAnnotation(clickedAnnotation.id);
+        setDragOffset({
+          x: x - clickedAnnotation.x,
+          y: y - clickedAnnotation.y,
+        });
+        return;
       }
+    }
+
+    if (selectedTool === 'text') {
+      setEditingText({ x, y });
+      setTextInput('');
+      setTimeout(() => textInputRef.current?.focus(), 0);
       return;
     }
+
+    if (selectedTool === 'select') return;
 
     setIsDrawing(true);
     const newAnnotation: Annotation = {
@@ -194,6 +214,25 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (draggingAnnotation) {
+      const rect = overlayRef.current!.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      setAnnotations(
+        annotations.map(ann =>
+          ann.id === draggingAnnotation
+            ? {
+                ...ann,
+                x: x - dragOffset.x,
+                y: y - dragOffset.y,
+              }
+            : ann
+        )
+      );
+      return;
+    }
+
     if (!isDrawing || !currentAnnotation) return;
 
     const rect = overlayRef.current!.getBoundingClientRect();
@@ -259,11 +298,43 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
   };
 
   const handleMouseUp = () => {
+    if (draggingAnnotation) {
+      setDraggingAnnotation(null);
+      return;
+    }
+
     if (!isDrawing || !currentAnnotation) return;
 
     setAnnotations([...annotations, currentAnnotation]);
     setIsDrawing(false);
     setCurrentAnnotation(null);
+  };
+
+  const handleSaveText = () => {
+    if (editingText && textInput.trim()) {
+      const newAnnotation: Annotation = {
+        id: Date.now().toString(),
+        type: 'text',
+        page: currentPage,
+        x: editingText.x,
+        y: editingText.y,
+        text: textInput,
+        fontSize,
+        color,
+      };
+      setAnnotations([...annotations, newAnnotation]);
+    }
+    setEditingText(null);
+    setTextInput('');
+  };
+
+  const handleTextInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSaveText();
+    } else if (e.key === 'Escape') {
+      setEditingText(null);
+      setTextInput('');
+    }
   };
 
   // Download edited PDF
@@ -490,6 +561,26 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
                   onMouseUp={handleMouseUp}
                   onMouseLeave={handleMouseUp}
                 />
+                {editingText && (
+                  <input
+                    ref={textInputRef}
+                    type="text"
+                    value={textInput}
+                    onChange={(e) => setTextInput(e.target.value)}
+                    onBlur={handleSaveText}
+                    onKeyDown={handleTextInputKeyDown}
+                    className="absolute px-2 py-1 border-2 border-indigo-500 rounded bg-white text-slate-800 font-sans z-10"
+                    style={{
+                      left: `${editingText.x}px`,
+                      top: `${editingText.y}px`,
+                      fontSize: `${fontSize}px`,
+                      color: color,
+                      minWidth: '200px',
+                    }}
+                    placeholder="Type text here..."
+                    aria-label="Text input for annotation"
+                  />
+                )}
               </div>
             </div>
 
