@@ -1,0 +1,15 @@
+# PDF Editor robots.txt
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*.pdf
+
+# Specific rules for common crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap
+Sitemap: https://pdf-editor.vercel.app/sitemap.xml
