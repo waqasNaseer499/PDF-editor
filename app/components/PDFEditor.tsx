@@ -94,6 +94,7 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
     };
 
     renderPage();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdfDoc, currentPage, zoom]);
 
   // Render annotations
@@ -148,6 +149,7 @@ export default function PDFEditor({ file, onClose }: PDFEditorProps) {
 
   useEffect(() => {
     renderAnnotations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [annotations, currentPage, zoom]);
 
   // Mouse handlers

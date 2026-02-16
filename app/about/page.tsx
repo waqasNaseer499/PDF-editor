@@ -31,7 +31,7 @@ export default function About() {
             <section>
               <h2 className="text-3xl font-bold text-slate-800 mb-4">What is PDF Editor?</h2>
               <p className="text-slate-600 leading-relaxed">
-                Professional PDF Editor is a free, web-based application that allows you to edit and annotate PDF documents directly in your browser. Whether you're a student, professional, or casual user, our tool provides a simple yet powerful way to mark up, annotate, and customize your PDF files without requiring any software installation.
+                Professional PDF Editor is a free, web-based application that allows you to edit and annotate PDF documents directly in your browser. Whether you&apos;re a student, professional, or casual user, our tool provides a simple yet powerful way to mark up, annotate, and customize your PDF files without requiring any software installation.
               </p>
             </section>
 
@@ -113,7 +113,7 @@ export default function About() {
                 <li className="flex gap-4">
                   <span className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">1</span>
                   <div>
-                    <strong className="text-slate-800">Upload Your PDF:</strong> Click "Open PDF Editor" and select a PDF file from your computer.
+                    <strong className="text-slate-800">Upload Your PDF:</strong> Click &ldquo;Open PDF Editor&rdquo; and select a PDF file from your computer.
                   </div>
                 </li>
                 <li className="flex gap-4">
@@ -137,7 +137,7 @@ export default function About() {
                 <li className="flex gap-4">
                   <span className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">5</span>
                   <div>
-                    <strong className="text-slate-800">Download:</strong> Click "Download PDF" to save your edited document with all annotations.
+                    <strong className="text-slate-800">Download:</strong> Click &ldquo;Download PDF&rdquo; to save your edited document with all annotations.
                   </div>
                 </li>
               </ol>
